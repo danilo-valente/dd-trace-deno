@@ -7,11 +7,7 @@ import Nomenclature from './service-naming/index.ts';
 const loadChannel = dc.channel('dd-trace:instrumentation:load');
 
 // instrument everything that needs Plugin System V2 instrumentation
-import 'https://esm.sh/dd-trace@4.13.1/packages/datadog-instrumentations/index.js';
-if (Deno.env.get('AWS_LAMBDA_FUNCTION_NAME') !== undefined) {
-  // instrument lambda environment
-  await import('./lambda/index.ts');
-}
+// import 'https://esm.sh/dd-trace@4.13.1/packages/datadog-instrumentations/index.js';
 
 const DD_TRACE_DISABLED_PLUGINS = Deno.env.get('DD_TRACE_DISABLED_PLUGINS');
 
