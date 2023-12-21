@@ -2,7 +2,7 @@ import path from 'node:path';
 
 import { _extractModuleNameAndHandlerPath, _extractModuleRootAndHandler, _getLambdaFilePath } from './ritm.ts';
 import { datadog } from '../handler.ts';
-import { addHook } from '../../../../datadog-instrumentations/src/helpers/instrument.ts';
+import { addHook } from 'https://esm.sh/dd-trace@4.13.1/packages/datadog-instrumentations/src/helpers/instrument.js';
 import shimmer from '../../../../datadog-shimmer.ts';
 
 /**

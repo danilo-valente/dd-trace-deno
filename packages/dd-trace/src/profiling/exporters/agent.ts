@@ -1,13 +1,13 @@
-import { Buffer } from "https://deno.land/std@0.177.0/node/buffer.ts";
-import retry from 'npm:retry@0.13.1';
-import { request as httpRequest } from "node:http";
-import { request as httpsRequest } from "node:https";
+import { Buffer } from 'node:buffer';
+import { request as httpRequest } from 'node:http';
+import { request as httpsRequest } from 'node:https';
+import retry from 'https://esm.sh/retry@0.13.1';
 
 // TODO: avoid using dd-trace internals. Make this a separate module?
+import packageJson from 'https://esm.sh/dd-trace@4.13.1/package.json' assert { type: 'json' };
+import { storage } from '../../../../datadog-core/index.ts';
 import docker from '../../exporters/common/docker.ts';
 import FormData from '../../exporters/common/form-data.ts';
-import { storage } from '../../../../datadog-core/index.ts';
-import packageJson from 'npm:dd-trace@4.13.1/package.json' assert { type: 'json' };
 const containerId = docker.id();
 
 function sendRequest(
@@ -40,7 +40,6 @@ function getBody(
   stream: { on: (arg0: string, arg1: { (chunk: any): number; (): void }) => void },
   callback: { (err: any, body: any): void; (arg0: any, arg1: any): void },
 ) {
-
   const chunks = [];
 
   stream.on('error', callback);
@@ -48,7 +47,6 @@ function getBody(
   stream.on('data', (chunk) => chunks.push(chunk));
 
   stream.on('end', () => {
-
     callback(null, Buffer.concat(chunks));
   });
 }
@@ -77,7 +75,6 @@ class AgentExporter {
     this._backoffTime = backoffTime;
     this._backoffTries = backoffTries;
   }
-
 
   export({ profiles, start, end, tags }) {
     const types = Object.keys(profiles);
@@ -121,7 +118,6 @@ class AgentExporter {
         knownLength: buffer.length,
       }]);
     }
-
 
     return new Promise((resolve: () => void, reject: (arg0: Error) => void) => {
       const operation = retry.operation({

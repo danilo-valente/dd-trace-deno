@@ -1,5 +1,5 @@
 import { lookup } from 'node:dns'; // cache to avoid instrumentation
-import { Buffer } from "https://deno.land/std@0.177.0/node/buffer.ts";
+import { Buffer } from 'node:buffer';
 import request from './exporters/common/request.ts';
 import dgram from 'node:dgram';
 import { isIP } from 'node:net';

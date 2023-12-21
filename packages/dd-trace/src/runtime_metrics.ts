@@ -1,12 +1,13 @@
 // TODO: capture every second and flush every 10 seconds
 
-import v8 from 'node:v8';
 import os from 'node:os';
-import process from 'node:process';
-import { DogStatsDClient } from './dogstatsd.ts';
-import log from './log/index.ts';
-import Histogram from './histogram.ts';
 import { performance } from 'node:perf_hooks';
+import process from 'node:process';
+import { setInterval } from 'node:timers';
+import v8 from 'node:v8';
+import { DogStatsDClient } from './dogstatsd.ts';
+import Histogram from './histogram.ts';
+import log from './log/index.ts';
 
 const INTERVAL = 10 * 1000;
 
@@ -26,7 +27,7 @@ reset();
 export function start(config) {
   const clientConfig = DogStatsDClient.generateClientConfig(config);
 
-  import('npm:@datadog/native-metrics@2.0.0').then((ddNativeMetrics) => {
+  import('https://esm.sh/@datadog/native-metrics@2.0.0').then((ddNativeMetrics) => {
     nativeMetrics = ddNativeMetrics;
     nativeMetrics.start();
   }).catch((e) => {
@@ -95,7 +96,12 @@ export function histogram(name: string | number, value, tag) {
   histograms[name].get(tag).record(value);
 }
 
-export function updateCount(name: string | number, count: number, tagOrMonotonic?: string | boolean, monotonic = false) {
+export function updateCount(
+  name: string | number,
+  count: number,
+  tagOrMonotonic?: string | boolean,
+  monotonic = false,
+) {
   if (!client) return;
   let tag;
   if (typeof tagOrMonotonic === 'boolean') {
@@ -124,7 +130,7 @@ export function gauge(name: string | number, value, tag) {
 export function increment(
   name: Parameters<typeof updateCount>[0],
   tagOrMonotonic?: Parameters<typeof updateCount>[2],
-  monotonic?: Parameters<typeof updateCount>[3]
+  monotonic?: Parameters<typeof updateCount>[3],
 ) {
   updateCount(name, 1, tagOrMonotonic, monotonic);
 }
@@ -132,7 +138,7 @@ export function increment(
 export function decrement(
   name: Parameters<typeof updateCount>[0],
   tagOrMonotonic?: Parameters<typeof updateCount>[2],
-  monotonic?: Parameters<typeof updateCount>[3]
+  monotonic?: Parameters<typeof updateCount>[3],
 ) {
   updateCount(name, -1, tagOrMonotonic, monotonic);
 }

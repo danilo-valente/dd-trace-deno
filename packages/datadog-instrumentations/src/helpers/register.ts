@@ -1,8 +1,8 @@
 'use strict';
 
-import dc from 'npm:dd-trace@4.13.1/packages/diagnostics_channel/index.js';
+import dc from 'node:diagnostics_channel';
 import path from 'node:path';
-import semver from 'npm:semver@7.5.4';
+import semver from 'https://esm.sh/semver@7.5.4';
 import Hook from './hook.ts';
 import requirePackageJson from '../../../dd-trace/src/require-package-json.ts';
 import log from '../../../dd-trace/src/log/index.ts';
@@ -28,7 +28,6 @@ if (!disabledInstrumentations.has('fetch')) {
 
 for (const packageName of names) {
   if (disabledInstrumentations.has(packageName)) continue;
-
 
   new Hook([packageName], (moduleExports, moduleName: string, moduleBaseDir, moduleVersion) => {
     moduleName = moduleName.replace(pathSepExpr, '/');
@@ -68,7 +67,6 @@ function matchVersion(version, ranges: any[]) {
 
 function getVersion(moduleBaseDir) {
   if (moduleBaseDir) {
-
     return requirePackageJson(moduleBaseDir, module).version;
   }
 }
@@ -77,9 +75,4 @@ function filename(name, file) {
   return [name, file].filter((val) => val).join('/');
 }
 
-export {
-  filename,
-  pathSepExpr,
-  loadChannel,
-  matchVersion,
-};
+export { filename, loadChannel, matchVersion, pathSepExpr };

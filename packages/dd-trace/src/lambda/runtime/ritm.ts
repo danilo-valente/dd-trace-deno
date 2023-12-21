@@ -9,9 +9,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import log from '../../log/index.ts';
-import Hook from '../../../../datadog-instrumentations/src/helpers/hook.ts';
-import instrumentations from '../../../../datadog-instrumentations/src/helpers/instrumentations.ts';
-import { filename, pathSepExpr } from '../../../../datadog-instrumentations/src/helpers/register';
+import Hook from 'https://esm.sh/dd-trace@4.13.1/packages/datadog-instrumentations/src/helpers/hook.js';
+import instrumentations from 'https://esm.sh/dd-trace@4.13.1/packages/datadog-instrumentations/src/helpers/instrumentations.js';
+import { filename, pathSepExpr } from 'https://esm.sh/dd-trace@4.13.1/packages/datadog-instrumentations/src/helpers/register.js';
 
 /**
  * Breaks the full handler string into two pieces: the module root

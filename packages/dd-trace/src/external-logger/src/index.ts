@@ -1,6 +1,7 @@
 import tracerLogger from '../../log/index.ts'; // path to require tracer logger
 
 import https from 'node:https';
+import { setImmediate, setInterval } from 'node:timers';
 
 class ExternalLogger {
   enabled: boolean;

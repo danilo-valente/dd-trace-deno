@@ -1,11 +1,11 @@
 // encoding used here is sha256
 // other languages use FNV1
 // this inconsistency is ok because hashes do not need to be consistent across services
-import * as hex from "https://deno.land/std@0.201.0/encoding/hex.ts";
+import * as hex from 'https://deno.land/std@0.204.0/encoding/hex.ts';
 import crypto from 'node:crypto';
-import { Buffer } from "https://deno.land/std@0.177.0/node/buffer.ts";
+import { Buffer } from 'node:buffer';
 import { decodeVarint, encodeVarint } from './encoding.ts';
-import LRUCache from 'npm:lru-cache@7.14.0';
+import LRUCache from 'https://esm.sh/lru-cache@7.14.0';
 
 const options = { max: 500 };
 const cache = new LRUCache(options);

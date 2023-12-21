@@ -1,10 +1,11 @@
+import dc from 'node:diagnostics_channel';
 import path from 'node:path';
-import parse from 'npm:module-details-from-path@1.0.3';
+import { setImmediate } from 'node:timers';
+import { fromFileUrl } from "https://deno.land/std@0.204.0/path/from_file_url.ts";
+import parse from 'https://esm.sh/module-details-from-path@1.0.3';
+import Config from '../config.ts';
 import requirePackageJson from '../require-package-json.ts';
 import { sendData } from './send-data.ts';
-import dc from 'npm:dd-trace@4.13.1/packages/diagnostics_channel/index.js';
-import { fileURLToPath } from 'node:url';
-import Config from "../config.ts";
 
 const savedDependenciesToSend = new Set();
 const detectedDependencyKeys = new Set();
@@ -52,13 +53,10 @@ function waitAndSend(
     os_version?: undefined;
   },
 ) {
-
   if (!immediate) {
-
     immediate = setImmediate(() => {
       immediate = null;
       if (savedDependenciesToSend.size > 0) {
-
         const dependencies = Array.from(savedDependenciesToSend.values()).splice(0, 1000).map(
           (pair: { split: (arg0: string) => [any, any] }) => {
             savedDependenciesToSend.delete(pair);
@@ -95,7 +93,7 @@ function onModuleLoad(data: { filename: any; request?: any }) {
     let filename = data.filename;
     if (filename && filename.startsWith(FILE_URI_START)) {
       try {
-        filename = fileURLToPath(filename);
+        filename = fromFileUrl(filename);
       } catch (e) {
         // cannot transform url to path
       }
@@ -111,14 +109,12 @@ function onModuleLoad(data: { filename: any; request?: any }) {
         const { name, basedir } = parseResult;
         if (basedir) {
           try {
-
             const { version } = requirePackageJson(basedir, module);
             const dependencyAndVersion = `${name} ${version}`;
 
             if (!detectedDependencyVersions.has(dependencyAndVersion)) {
               savedDependenciesToSend.add(dependencyAndVersion);
               detectedDependencyVersions.add(dependencyAndVersion);
-
 
               waitAndSend(config, application, host);
             }

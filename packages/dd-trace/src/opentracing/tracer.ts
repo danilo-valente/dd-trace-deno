@@ -6,7 +6,7 @@ import TextMapPropagator from './propagation/text_map.ts';
 import HttpPropagator from './propagation/http.ts';
 import BinaryPropagator from './propagation/binary.ts';
 import LogPropagator from './propagation/log.ts';
-import * as formats from 'npm:dd-trace@4.13.1/ext/formats.js';
+import * as formats from 'https://esm.sh/dd-trace@4.13.1/ext/formats.js';
 
 import log from '../log/index.ts';
 import * as runtimeMetrics from '../runtime_metrics.ts';
@@ -21,15 +21,15 @@ export default class DatadogTracer {
   private _version: any;
   private _env: any;
   private _tags: any;
-  private _computePeerService: any;
-  private _peerServiceMapping: any;
-  private _logInjection: any;
+  protected _computePeerService: any;
+  protected _peerServiceMapping: any;
+  protected _logInjection: any;
   private _debug: any;
   private _prioritySampler: PrioritySampler;
   private _exporter: any;
   private _processor: SpanProcessor;
-  private _url: any;
-  private _enableGetRumData: any;
+  protected _url: any;
+  protected _enableGetRumData: any;
   private _traceId128BitGenerationEnabled: any;
   private _propagators: { [x: number]: any };
   private _hostname: any;
@@ -49,7 +49,6 @@ export default class DatadogTracer {
       reportHostname: any;
     },
   ) {
-
     const Exporter = getExporter(config.experimental.exporter);
 
     this._service = config.service;
@@ -77,21 +76,14 @@ export default class DatadogTracer {
     }
   }
 
-
   startSpan(name, options = {}) {
-
-    const parent = options.childOf
-
-      ? getContext(options.childOf)
-
-      : getParent(options.references);
+    const parent = options.childOf ? getContext(options.childOf) : getParent(options.references);
 
     const tags = {
       'service.name': this._service,
     };
 
     const span = new Span(this, this._processor, this._prioritySampler, {
-
       operationName: options.operationName || name,
       parent,
       tags,
@@ -110,7 +102,6 @@ export default class DatadogTracer {
     return span;
   }
 
-
   inject(spanContext: { context: () => any }, format: string | number, carrier) {
     if (spanContext instanceof Span) {
       spanContext = spanContext.context();
@@ -126,10 +117,8 @@ export default class DatadogTracer {
     }
   }
 
-
   extract(format: string | number, carrier) {
     try {
-
       return this._propagators[format].extract(carrier);
     } catch (e) {
       log.error(e);

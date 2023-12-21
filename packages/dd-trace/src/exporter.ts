@@ -1,4 +1,4 @@
-import * as exporters from 'npm:dd-trace@4.13.1/ext/exporters.js';
+import * as exporters from 'https://esm.sh/dd-trace@4.13.1/ext/exporters.js';
 import fs from 'node:fs';
 import * as constants from './constants.ts';
 
@@ -11,7 +11,7 @@ type Exporter =
   | typeof LogExporter
   | typeof AgentExporter
   | typeof AgentlessExporter
-  | typeof AgentProxyExporter
+  | typeof AgentProxyExporter;
 
 export default (name): Exporter => {
   const inAWSLambda = Deno.env.get('AWS_LAMBDA_FUNCTION_NAME') !== undefined;
@@ -27,8 +27,6 @@ export default (name): Exporter => {
     case exporters.AGENT_PROXY:
       return AgentProxyExporter;
     default:
-      return inAWSLambda && !usingLambdaExtension
-        ? LogExporter
-        : AgentExporter;
+      return inAWSLambda && !usingLambdaExtension ? LogExporter : AgentExporter;
   }
 };

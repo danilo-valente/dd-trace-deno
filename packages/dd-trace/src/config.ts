@@ -4,7 +4,7 @@ import crypto from 'node:crypto';
 import { URL } from 'node:url';
 import log from './log/index.ts';
 import pkg from './pkg.ts';
-import coalesce from 'npm:koalas@1.0.2';
+import coalesce from 'https://esm.sh/koalas@1.0.2';
 import * as tagger from './tagger.ts';
 import { isFalse, isTrue } from './util.ts';
 import { GIT_COMMIT_SHA, GIT_REPOSITORY_URL } from './plugins/util/tags.ts';
@@ -722,9 +722,7 @@ ken|consumer_?(?:id|key|secret)|sign(?:ed|ature)?|auth(?:entication|orization)?)
     this.tagsHeaderMaxLength = parseInt(DD_TRACE_X_DATADOG_TAGS_MAX_LENGTH);
     this.appsec = {
       enabled: DD_APPSEC_ENABLED,
-      rules: DD_APPSEC_RULES
-        ? safeJsonParse(maybeFile(DD_APPSEC_RULES))
-        : recommendedJson,
+      rules: DD_APPSEC_RULES ? safeJsonParse(maybeFile(DD_APPSEC_RULES)) : recommendedJson,
       customRulesProvided: !!DD_APPSEC_RULES,
       rateLimit: DD_APPSEC_TRACE_RATE_LIMIT,
       wafTimeout: DD_APPSEC_WAF_TIMEOUT,
@@ -825,7 +823,7 @@ ken|consumer_?(?:id|key|secret)|sign(?:ed|ature)?|auth(?:entication|orization)?)
       log_injection_enabled?: any;
       sampleRate?: any;
       ingestion?: { sampleRate: any };
-      logInjection?: any;
+      logInjection?: boolean;
       headerTags?: any;
     },
     remote,

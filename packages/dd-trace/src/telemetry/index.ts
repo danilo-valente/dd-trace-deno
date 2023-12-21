@@ -1,9 +1,10 @@
-import packageJson from 'npm:dd-trace@4.13.1/package.json' assert { type: 'json' };
-import dc from 'npm:dd-trace@4.13.1/packages/diagnostics_channel/index.js';
+import dc from 'node:diagnostics_channel';
+import packageJson from 'https://esm.sh/dd-trace@4.13.1/package.json' assert { type: 'json' };
 import os from 'node:os';
+import { setInterval } from 'node:timers';
+import Config from '../config.ts';
 import * as dependencies from './dependencies.ts';
 import { sendData } from './send-data.ts';
-import Config from "../config.ts";
 
 const { manager: metricsManager } = await import('./metrics.ts');
 
@@ -39,7 +40,6 @@ function getIntegrations() {
 }
 
 function flatten(input, result = [], prefix = [], traversedObjects = null) {
-
   traversedObjects = traversedObjects || new WeakSet();
   if (traversedObjects.has(input)) {
     return;
@@ -112,7 +112,6 @@ function createHostObject() {
 }
 
 function getTelemetryData() {
-
   return { config, application, host, heartbeatInterval };
 }
 
@@ -186,7 +185,6 @@ function start(aConfig: Config, thePluginManager) {
 }
 
 function stop() {
-
   if (!config) {
     return;
   }
@@ -202,7 +200,6 @@ function stop() {
 }
 
 function updateIntegrations() {
-
   if (!config || !config.telemetry.enabled) {
     return;
   }
@@ -221,7 +218,6 @@ function updateConfig(changes: any[], config: { telemetry?: any; tags?: any; hos
   // Hack to make system tests happy until we ship telemetry v2
   if (Deno.env.get('DD_INTERNAL_TELEMETRY_V2_ENABLED') !== '1') return;
 
-
   const application = createAppObject(config);
   const host = createHostObject();
 
@@ -232,7 +228,6 @@ function updateConfig(changes: any[], config: { telemetry?: any; tags?: any; hos
   };
 
   const configuration = changes.map((change: { name: string | number; value: any[]; origin: any }) => ({
-
     name: names[change.name],
     value: Array.isArray(change.value) ? change.value.join(',') : change.value,
     origin: change.origin,

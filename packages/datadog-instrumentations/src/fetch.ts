@@ -1,7 +1,7 @@
 'use strict';
 
 import * as shimmer from '../../datadog-shimmer/index.ts';
-import dc from 'npm:dd-trace@4.13.1/packages/diagnostics_channel/index.js';
+import dc from 'node:diagnostics_channel';
 
 const startChannel = dc.channel('apm:fetch:request:start');
 const finishChannel = dc.channel('apm:fetch:request:finish');
@@ -30,7 +30,6 @@ function wrapFetch(
       arguments[0] = message.req;
 
       arguments[1] = { headers: message.headers };
-
 
       return fetch.apply(this, arguments)
         .then(

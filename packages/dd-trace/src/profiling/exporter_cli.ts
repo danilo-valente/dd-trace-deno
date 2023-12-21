@@ -1,18 +1,18 @@
 import { AgentExporter } from './exporters/agent.ts';
 import { FileExporter } from './exporters/file.ts';
 
-import { encode, heap, SourceMapper } from 'npm:@datadog/pprof';
+import { encode, heap, SourceMapper } from 'https://esm.sh/@datadog/pprof@3.2.0';
 import { ConsoleLogger } from './loggers/console.ts';
 import { tagger } from './tagger.ts';
 import fs from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import { fromFileUrl } from "https://deno.land/std@0.204.0/path/from_file_url.ts";
 
 const logger = new ConsoleLogger();
 const timeoutMs = 10 * 1000;
 
-function exporterFromURL(url: { protocol: string }) {
+function exporterFromURL(url: URL) {
   if (url.protocol === 'file:') {
-    return new FileExporter({ pprofPrefix: fileURLToPath(url) });
+    return new FileExporter({ pprofPrefix: fromFileUrl(url) });
   } else {
     return new AgentExporter({
       url,

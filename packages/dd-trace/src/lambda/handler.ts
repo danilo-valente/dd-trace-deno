@@ -1,5 +1,5 @@
 import log from '../log/index.ts';
-import { channel } from '../../../datadog-instrumentations/src/helpers/instrument.ts';
+import { channel } from 'https://esm.sh/dd-trace@4.13.1/packages/datadog-instrumentations/src/helpers/instrument.js';
 import { ERROR_MESSAGE, ERROR_TYPE } from '../constants.ts';
 import { ImpendingTimeout } from './runtime/errors.ts';
 

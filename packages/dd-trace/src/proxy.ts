@@ -11,10 +11,10 @@ import AppsecSdk from './appsec/sdk/index.ts';
 import * as dogstatsd from './dogstatsd.ts';
 import TracerProvider from './opentelemetry/tracer_provider.ts';
 
-export default class Tracer extends NoopProxy {
+export default class ProxyTracer extends NoopProxy {
   private _initialized: boolean;
-  private _pluginManager: any;
-  dogstatsd: any;
+  private _pluginManager: PluginManager;
+  dogstatsd: dogstatsd.NoopDogStatsDClient;
   private _tracer: DatadogTracer;
   appsec: any;
   private _testApiManualPlugin: any;
@@ -26,7 +26,7 @@ export default class Tracer extends NoopProxy {
     this.dogstatsd = new dogstatsd.NoopDogStatsDClient();
   }
 
-  async init(options) {
+  async init(options): Promise<this> {
     if (this._initialized) return this;
 
     this._initialized = true;
@@ -115,8 +115,8 @@ export default class Tracer extends NoopProxy {
     return this;
   }
 
-  use() {
-    this._pluginManager.configurePlugin(...arguments);
+  use(...args: Parameters<PluginManager['configurePlugin']>) {
+    this._pluginManager.configurePlugin(...args);
     return this;
   }
 

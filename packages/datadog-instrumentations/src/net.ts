@@ -1,5 +1,5 @@
 import 'node:dns';
-import dc from 'npm:dd-trace@4.13.1/packages/diagnostics_channel/index.js';
+import dc from 'node:diagnostics_channel';
 const {
   channel,
   addHook,

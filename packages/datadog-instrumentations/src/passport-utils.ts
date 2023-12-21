@@ -1,7 +1,7 @@
 'use strict';
 
 import * as shimmer from '../../datadog-shimmer/index.ts';
-import dc from 'npm:dd-trace@4.13.1/packages/diagnostics_channel/index.js';
+import dc from 'node:diagnostics_channel';
 
 const passportVerifyChannel = dc.channel('datadog:passport:verify:finish');
 
@@ -36,6 +36,4 @@ function wrapVerify(verify: { apply: (arg0: any, arg1: IArguments) => any }, pas
   }
 }
 
-export {
-  wrapVerify,
-};
+export { wrapVerify };

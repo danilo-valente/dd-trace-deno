@@ -1,5 +1,5 @@
 import log from '../../log/index.ts';
-import telemetryLogs from './telemetry/log/index.ts';
+import * as telemetryLogs from './telemetry/log/index.ts';
 import { calculateDDBasePath } from '../../util.ts';
 
 const ddBasePath = calculateDDBasePath(__dirname);

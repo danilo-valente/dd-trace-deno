@@ -1,16 +1,14 @@
 'use strict';
 
 const {
-
   channel,
 
   addHook,
 
   AsyncResource,
-
 } = await import('./helpers/instrument.ts');
-// @deno-types="npm:@types/lodash@4.14.197/kebabcase.d.ts"
-import kebabCase from 'npm:lodash@4.17.21/kebabcase.js';
+// @deno-types="https://esm.sh/@types/lodash@4.14.202/kebabCase"
+import kebabCase from 'https://esm.sh/lodash@4.17.21/kebabCase';
 import shimmer from '../../datadog-shimmer/index.ts';
 
 const startCh = dc.channel('apm:amqplib:command:start');
@@ -20,12 +18,9 @@ const errorCh = dc.channel('apm:amqplib:command:error');
 let methods = {};
 
 addHook({ name: 'amqplib', file: 'lib/defs.js', versions: ['>=0.5'] }, (defs: object) => {
-
   methods = Object.keys(defs)
-
     .filter((key) => Number.isInteger(defs[key]))
     .filter((key) => isCamelCase(key))
-
     .reduce((acc, key) => Object.assign(acc, { [defs[key]]: kebabCase(key).replace('-', '.') }), {});
   return defs;
 });
@@ -33,13 +28,11 @@ addHook({ name: 'amqplib', file: 'lib/defs.js', versions: ['>=0.5'] }, (defs: ob
 addHook(
   { name: 'amqplib', file: 'lib/channel.js', versions: ['>=0.5'] },
   (channel: { Channel: { prototype: any }; BaseChannel: { prototype: any } }) => {
-
     shimmer.wrap(
       channel.Channel.prototype,
       'sendImmediately',
       (sendImmediately: string | { apply: (arg0: any, arg1: any) => any } | { originalRequest: any }) =>
         function (method: string | number, fields) {
-
           return instrument(sendImmediately, this, arguments, methods[method], fields);
         },
     );
@@ -49,7 +42,6 @@ addHook(
       'sendMessage',
       (sendMessage: string | { apply: (arg0: any, arg1: any) => any } | { originalRequest: any }) =>
         function (fields: { s: any }) {
-
           return instrument(sendMessage, this, arguments, 'basic.publish', fields);
         },
     );

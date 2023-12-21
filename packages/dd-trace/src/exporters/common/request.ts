@@ -162,7 +162,6 @@ function request(
     storage.enterWith({ noop: true });
 
     try {
-      console.log('>>>>>>> timeout', timeout);
       const response = await fetch(url, {
         method: options.method,
         headers: options.headers,

@@ -1,6 +1,6 @@
 'use strict';
 
-import dc from 'npm:dd-trace@4.13.1/packages/diagnostics_channel/index.js';
+import dc from 'node:diagnostics_channel';
 import instrumentations from './instrumentations.ts';
 import { AsyncResource } from 'node:async_hooks';
 
@@ -11,7 +11,7 @@ export function channel(name: string | number) {
   const ch = dc.channel(name);
   channelMap[name] = ch;
   return ch;
-};
+}
 
 /**
  * @param {string} args.name module name
@@ -19,7 +19,7 @@ export function channel(name: string | number) {
  * @param {string} args.file path to file within package to instrument?
  * @param Function hook
  */
-export function addHook({ name, versions, file }: { name: string; versions?: string; file?: string; }, hook) {
+export function addHook({ name, versions, file }: { name: string; versions?: string; file?: string }, hook) {
   if (!instrumentations[name]) {
     instrumentations[name] = [];
   }

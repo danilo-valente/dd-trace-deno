@@ -1,4 +1,4 @@
-import coalesce from 'npm:koalas@1.0.2';
+import coalesce from 'https://esm.sh/koalas@1.0.2';
 import os from 'node:os';
 import path from 'node:path';
 import { format, pathToFileURL, URL } from 'node:url';
@@ -65,7 +65,6 @@ class Config {
       DD_PROFILING_EXPERIMENTAL_ENDPOINT_COLLECTION_ENABLED,
     } = Deno.env.toObject();
 
-
     const enabled = isTrue(coalesce(options.enabled, DD_PROFILING_ENABLED, true));
 
     const env = coalesce(options.env, DD_ENV);
@@ -101,7 +100,6 @@ class Config {
 
     this.tags = Object.assign(
       tagger.parse(DD_TAGS),
-
       tagger.parse(options.tags),
       tagger.parse({ env, host, service, version, functionname }),
     );
@@ -133,14 +131,12 @@ class Config {
       }),
     ));
 
-
     this.exporters = ensureExporters(
       options.exporters || [
         new AgentExporter(this),
       ],
       this,
     );
-
 
     const oomMonitoringEnabled = isTrue(
       coalesce(options.oomMonitoring, DD_PROFILING_EXPERIMENTAL_OOM_MONITORING_ENABLED, true),
@@ -158,7 +154,6 @@ class Config {
       0,
     );
     const exportStrategies = oomMonitoringEnabled
-
       ? ensureOOMExportStrategies(
         coalesce(options.oomExportStrategies, DD_PROFILING_EXPERIMENTAL_OOM_EXPORT_STRATEGIES, [
           oomExportStrategies.PROCESS,
@@ -175,9 +170,7 @@ class Config {
       exportCommand,
     };
 
-
     const profilers = options.profilers
-
       ? options.profilers
       : getProfilers({ DD_PROFILING_HEAP_ENABLED, DD_PROFILING_WALLTIME_ENABLED, DD_PROFILING_PROFILERS });
 
@@ -219,7 +212,6 @@ function getProfilers({ DD_PROFILING_HEAP_ENABLED, DD_PROFILING_WALLTIME_ENABLED
 }
 
 function getExportStrategy(name: string, options: { logger: { error: (arg0: string) => void } }) {
-
   const strategy = Object.values(oomExportStrategies).find((value: string) => value === name);
   if (strategy === undefined) {
     options.logger.error(`Unknown oom export strategy "${name}"`);
@@ -242,7 +234,6 @@ function ensureOOMExportStrategies(strategies: string | any[], options: this) {
       strategies[i] = getExportStrategy(strategy, options);
     }
   }
-
 
   return [...new Set(strategies)];
 }
@@ -285,7 +276,6 @@ function getProfiler(name: string, options: { logger: { error: (arg0: string) =>
 
 function ensureProfilers(profilers: any[], options: this) {
   if (typeof profilers === 'string') {
-
     profilers = profilers.split(',');
   }
 
@@ -315,7 +305,6 @@ function ensureLogger(logger: { debug: any; info: any; warn: any; error: any }) 
 }
 
 function buildExportCommand(options: this) {
-
   const tags = [...Object.entries(options.tags), ['snapshot', snapshotKinds.ON_OUT_OF_MEMORY]].map(([key, value]) =>
     `${key}:${value}`
   ).join(',');

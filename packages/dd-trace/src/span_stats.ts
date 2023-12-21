@@ -1,9 +1,10 @@
+import * as tags from 'https://esm.sh/dd-trace@4.13.1/ext/tags.js';
+import packageJson from 'https://esm.sh/dd-trace@4.13.1/package.json' assert { type: 'json' };
 import os from 'node:os';
-import pkg from './pkg.ts';
-import packageJson from 'npm:dd-trace@4.13.1/package.json' assert { type: 'json' };
-import { LogCollapsingLowestDenseDDSketch } from 'npm:@datadog/sketches-js@2.1.0';
+import { setInterval } from 'node:timers';
+import { LogCollapsingLowestDenseDDSketch } from 'https://esm.sh/@datadog/sketches-js@2.1.0';
 import { ORIGIN_KEY, TOP_LEVEL_KEY } from './constants.ts';
-import * as tags from 'npm:dd-trace@4.13.1/ext/tags.js';
+import pkg from './pkg.ts';
 const { HTTP_STATUS_CODE, MEASURED } = tags;
 
 import { SpanStatsExporter } from './exporters/span-stats/index.ts';
