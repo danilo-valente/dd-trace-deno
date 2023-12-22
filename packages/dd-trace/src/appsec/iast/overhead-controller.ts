@@ -1,5 +1,3 @@
-import { setInterval } from 'node:timers';
-
 const OVERHEAD_CONTROLLER_CONTEXT_KEY = 'oce';
 const REPORT_VULNERABILITY = 'REPORT_VULNERABILITY';
 const INTERVAL_RESET_GLOBAL_CONTEXT = 60 * 1000;
@@ -106,7 +104,7 @@ function startGlobalContext() {
     _resetGlobalContext();
   }, INTERVAL_RESET_GLOBAL_CONTEXT);
 
-  resetGlobalContextInterval.unref && resetGlobalContextInterval.unref();
+  Deno.unrefTimer(resetGlobalContextInterval);
 }
 
 function finishGlobalContext() {

@@ -8,8 +8,7 @@ import { timeInputToHrTime } from 'https://esm.sh/@opentelemetry/core@1.15.2';
 import tracer from '../proxy.ts';
 import DatadogSpan from '../opentracing/span.ts';
 import { ERROR_MESSAGE, ERROR_STACK, ERROR_TYPE } from '../constants.ts';
-import * as tags from 'https://esm.sh/dd-trace@4.13.1/ext/tags.js';
-const { RESOURCE_NAME, SERVICE_NAME } = tags;
+import { RESOURCE_NAME, SERVICE_NAME } from 'https://esm.sh/dd-trace@4.13.1/ext/tags.js';
 
 import SpanContext from './span_context.ts';
 

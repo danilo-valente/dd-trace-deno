@@ -71,7 +71,7 @@ export default class ProxyTracer extends NoopProxy {
         // do not stop tracer initialization if the profiler fails to be imported
         try {
           const profiler = await import('./profiler.ts');
-          profiler.start(config)
+          profiler.start(config);
         } catch (e) {
           log.error(e);
         }
@@ -88,7 +88,7 @@ export default class ProxyTracer extends NoopProxy {
         // dirty require for now so zero appsec code is executed unless explicitly enabled
         if (config.appsec.enabled) {
           const appsec = await import('./appsec/index.ts');
-          appsec.enable(config)
+          appsec.enable(config);
         }
 
         this._tracer = new DatadogTracer(config);
@@ -96,14 +96,16 @@ export default class ProxyTracer extends NoopProxy {
 
         if (config.iast.enabled) {
           const iast = await import('./appsec/iast/index.ts');
-          iast.enable(config, this._tracer)
+          iast.enable(config, this._tracer);
         }
 
         this._pluginManager.configure(config);
         setStartupLogPluginManager(this._pluginManager);
 
         if (config.isManualApiEnabled) {
-          const { default: TestApiManualPlugin } = await import('./ci-visibility/test-api-manual/test-api-manual-plugin.ts');
+          const { default: TestApiManualPlugin } = await import(
+            './ci-visibility/test-api-manual/test-api-manual-plugin.ts'
+          );
           this._testApiManualPlugin = new TestApiManualPlugin(this);
           this._testApiManualPlugin.configure({ ...config, enabled: true });
         }

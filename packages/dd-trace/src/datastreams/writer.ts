@@ -1,7 +1,7 @@
-import packageJson from 'https://esm.sh/dd-trace@4.13.1/package.json' assert { type: 'json' };
+import packageJson from '../../../../package.json.ts';
 import log from '../log/index.ts';
 import request from '../exporters/common/request.ts';
-import { format, URL } from 'node:url';
+import { format } from 'node:url';
 import msgpack from 'https://esm.sh/msgpack-lite@0.1.26';
 import zlib from 'node:zlib';
 const codec = msgpack.createCodec({ int64: true });

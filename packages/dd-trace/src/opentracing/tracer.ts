@@ -1,4 +1,3 @@
-import os from 'node:os';
 import Span from './span.ts';
 import SpanProcessor from '../span_processor.ts';
 import PrioritySampler from '../priority_sampler.ts';
@@ -72,7 +71,7 @@ export default class DatadogTracer {
       [formats.LOG]: new LogPropagator(config),
     };
     if (config.reportHostname) {
-      this._hostname = os.hostname();
+      this._hostname = Deno.hostname();
     }
   }
 
@@ -113,7 +112,7 @@ export default class DatadogTracer {
       this._propagators[format].inject(spanContext, carrier);
     } catch (e) {
       log.error(e);
-      runtimeMetrics.increment('datadog.tracer.node.inject.errors', true);
+      runtimeMetrics.increment('datadog.tracer.deno.inject.errors', true);
     }
   }
 
@@ -122,7 +121,7 @@ export default class DatadogTracer {
       return this._propagators[format].extract(carrier);
     } catch (e) {
       log.error(e);
-      runtimeMetrics.increment('datadog.tracer.node.extract.errors', true);
+      runtimeMetrics.increment('datadog.tracer.deno.extract.errors', true);
       return null;
     }
   }

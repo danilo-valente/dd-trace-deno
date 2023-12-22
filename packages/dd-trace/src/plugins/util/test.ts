@@ -1,6 +1,3 @@
-import path from 'node:path';
-import fs from 'node:fs';
-import { URL } from 'node:url';
 import log from '../../log/index.ts';
 
 import istanbul from 'https://esm.sh/istanbul-lib-coverage@3.2.0';
@@ -28,7 +25,9 @@ const { RESOURCE_NAME, SAMPLING_PRIORITY, SPAN_TYPE } = tags;
 import { SAMPLING_RULE_DECISION } from '../../constants.ts';
 import * as priority from 'https://esm.sh/dd-trace@4.13.1/ext/priority.js';
 const { AUTO_KEEP } = priority;
-import packageJson from 'https://esm.sh/dd-trace@4.13.1/package.json' assert { type: 'json' };
+import packageJson from '../../../../../package.json.ts';
+import { relative } from 'https://deno.land/std@0.204.0/path/relative.ts';
+import { SEP } from 'https://deno.land/std@0.204.0/path/separator.ts';
 const TEST_FRAMEWORK = 'test.framework';
 const TEST_FRAMEWORK_VERSION = 'test.framework_version';
 const TEST_TYPE = 'test.type';
@@ -260,7 +259,7 @@ function getTestCommonTags(name, suite, version, testFramework: string) {
 
 /**
  * We want to make sure that test suites are reported the same way for
- * every OS, so we replace `path.sep` by `/`
+ * every OS, so we replace `SEP` by `/`
  */
 function getTestSuitePath(testSuiteAbsolutePath, sourceRoot) {
   if (!testSuiteAbsolutePath) {
@@ -268,9 +267,9 @@ function getTestSuitePath(testSuiteAbsolutePath, sourceRoot) {
   }
   const testSuitePath = testSuiteAbsolutePath === sourceRoot
     ? testSuiteAbsolutePath
-    : path.relative(sourceRoot, testSuiteAbsolutePath);
+    : relative(sourceRoot, testSuiteAbsolutePath);
 
-  return testSuitePath.replace(path.sep, '/');
+  return testSuitePath.replace(SEP, '/');
 }
 
 const POSSIBLE_CODEOWNERS_LOCATIONS = [
@@ -285,7 +284,7 @@ function getCodeOwnersFileEntries(rootDir = Deno.cwd()) {
 
   POSSIBLE_CODEOWNERS_LOCATIONS.forEach((location) => {
     try {
-      codeOwnersContent = fs.readFileSync(`${rootDir}/${location}`).toString();
+      codeOwnersContent = Deno.readTextFileSync(`${rootDir}/${location}`);
     } catch (e) {
       // retry with next path
     }

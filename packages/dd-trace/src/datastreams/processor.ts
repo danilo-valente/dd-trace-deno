@@ -1,6 +1,4 @@
-import packageJson from 'https://esm.sh/dd-trace@4.13.1/package.json' assert { type: 'json' }; // Message pack int encoding is done in big endian, but data streams uses little endian
-import os from 'node:os';
-import { setInterval } from 'node:timers';
+import packageJson from '../../../../package.json.ts';
 import int64Buffer from 'https://esm.sh/int64-buffer@0.1.10';
 
 import { LogCollapsingLowestDenseDDSketch } from 'https://esm.sh/@datadog/sketches-js@2.1.0';
@@ -90,7 +88,7 @@ class DataStreamsProcessor {
     });
     this.bucketSizeNs = 1e10;
     this.buckets = new TimeBuckets();
-    this.hostname = os.hostname();
+    this.hostname = Deno.hostname();
     this.enabled = dsmEnabled;
     this.env = env;
     this.tags = tags || {};
@@ -99,7 +97,7 @@ class DataStreamsProcessor {
 
     if (this.enabled) {
       this.timer = setInterval(this.onInterval.bind(this), 10000);
-      this.timer.unref();
+      Deno.unrefTimer(this.timer);
     }
   }
 

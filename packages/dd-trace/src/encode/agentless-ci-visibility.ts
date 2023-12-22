@@ -1,6 +1,6 @@
 import { normalizeSpan, truncateSpan } from './tags-processors.ts';
 import { AgentEncoder } from './0.4.ts';
-import packageJson from 'https://esm.sh/dd-trace@4.13.1/package.json' assert { type: 'json' };
+import packageJson from '../../../../package.json.ts';
 import id from '../../../dd-trace/src/id.ts';
 const ENCODING_VERSION = 1;
 

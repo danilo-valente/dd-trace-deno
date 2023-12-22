@@ -1,9 +1,6 @@
 import dc from 'node:diagnostics_channel';
-import packageJson from 'https://esm.sh/dd-trace@4.13.1/package.json' assert { type: 'json' };
-import os from 'node:os';
-import { setInterval } from 'node:timers';
+import packageJson from '../../../../package.json.ts';
 import Config from '../config.ts';
-import * as dependencies from './dependencies.ts';
 import { sendData } from './send-data.ts';
 
 const { manager: metricsManager } = await import('./metrics.ts');
@@ -83,30 +80,30 @@ function createAppObject(config: { service: any; env: any; version: any }) {
 }
 
 function createHostObject() {
-  const osName = os.type();
+  const osName = Deno.build.os;
 
-  if (osName === 'Linux' || osName === 'Darwin') {
+  if (osName === 'linux' || osName === 'darwin') {
     return {
-      hostname: os.hostname(),
+      hostname: Deno.hostname(),
       os: osName,
-      architecture: os.arch(),
-      kernel_version: os.version(),
-      kernel_release: os.release(),
+      architecture: Deno.build.arch,
+      kernel_version: Deno.osRelease(),
+      kernel_release: Deno.osRelease(),
       kernel_name: osName,
     };
   }
 
-  if (osName === 'Windows_NT') {
+  if (osName === 'windows') {
     return {
-      hostname: os.hostname(),
+      hostname: Deno.hostname(),
       os: osName,
-      architecture: os.arch(),
-      os_version: os.version(),
+      architecture: Deno.build.arch,
+      os_version: Deno.osRelease(),
     };
   }
 
   return {
-    hostname: os.hostname(), // TODO is this enough?
+    hostname: Deno.hostname(), // TODO is this enough?
     os: osName,
   };
 }
@@ -171,7 +168,6 @@ function start(aConfig: Config, thePluginManager) {
 
   heartbeatInterval = config.telemetry.heartbeatInterval;
 
-  dependencies.start(config, application, host);
   sendData(config, application, host, 'app-started', appStarted());
   heartbeat(config, application, host);
   interval = setInterval(() => {

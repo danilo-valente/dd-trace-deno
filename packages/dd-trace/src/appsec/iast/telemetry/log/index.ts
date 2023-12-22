@@ -1,5 +1,4 @@
 import dc from 'node:diagnostics_channel';
-import { setInterval } from 'node:timers';
 import log from '../../../../log/index.ts';
 import { sendData } from '../../../../telemetry/send-data.ts';
 import logCollector from './log-collector.ts';
@@ -51,7 +50,7 @@ function onTelemetryStart(msg: { config: any; application: any; host: any; heart
   if (msg.heartbeatInterval) {
     interval = setInterval(sendLogs, msg.heartbeatInterval);
 
-    interval.unref();
+    Deno.unrefTimer(interval);
   }
 
   return true;

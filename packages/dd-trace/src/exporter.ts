@@ -1,5 +1,5 @@
 import * as exporters from 'https://esm.sh/dd-trace@4.13.1/ext/exporters.js';
-import fs from 'node:fs';
+import { existsSync } from 'https://deno.land/std@0.204.0/fs/exists.ts';
 import * as constants from './constants.ts';
 
 import LogExporter from './exporters/log/index.ts';
@@ -15,7 +15,7 @@ type Exporter =
 
 export default (name): Exporter => {
   const inAWSLambda = Deno.env.get('AWS_LAMBDA_FUNCTION_NAME') !== undefined;
-  const usingLambdaExtension = inAWSLambda && fs.existsSync(constants.DATADOG_LAMBDA_EXTENSION_PATH);
+  const usingLambdaExtension = inAWSLambda && existsSync(constants.DATADOG_LAMBDA_EXTENSION_PATH);
 
   switch (name) {
     case exporters.LOG:
